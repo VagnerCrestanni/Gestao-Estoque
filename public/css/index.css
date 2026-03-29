@@ -1,0 +1,29 @@
+body {
+    background-color: #1e3a5f !important; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    align-items: center;
+}
+
+.login-card {
+    max-width: 400px;
+    width: 100%;
+    border: none !important;
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+.form-control {
+    border: 1px solid #dee2e6;
+    padding: 10px;
+}
+
+.form-control:focus {
+    border-color: #1e3a5f;
+    box-shadow: 0 0 0 0.25rem rgba(30, 58, 95, 0.25);
+}
+
+.btn:hover {
+    background-color: #162d4a !important;
+    transition: 0.3s;
+}
