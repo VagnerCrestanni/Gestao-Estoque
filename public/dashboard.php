@@ -14,7 +14,7 @@
     <?php include 'sidebar.php'; ?>
 
            <div class="container mt-5">
-            <h1 class="dash-title" style="margin-left: 250px;" color="#1e3a5f" font-size="35px">Dashboard</h1>
+            <h1 class="dash-title" style= "color:#1e3a5f; font-size:35px">Dashboard</h1>
 
               <div class="cards">
 

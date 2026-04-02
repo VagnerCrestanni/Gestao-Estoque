@@ -15,10 +15,11 @@
 
     <div class="container py-5" >
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2> Gestão de Fornecedores </h2>
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNovoFornecedor">
-        <i class="fas fa-plus"></i> Novo Fornecedor
-    </button>
+        <h1 style = "color:#1e3a5f; font-size:35px">Gestão de Fornecedores</h1>
+
+        <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#modalNovoFornecedor" 
+        style="background-color: #1e3a5f; color: white; border: none; font-weight: bold;">
+        <i class="fas fa-plus"></i> Novo Fornecedor</button>
     </div>
 
     <div class="card shadow-sm">
@@ -77,7 +78,9 @@
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary">Salvar</button>
+        <button type="button" class="btn btn-custom" 
+        style="background-color: #1e3a5f; color: white; border: none; font-weight: bold;">
+        Salvar</button>
       </div>
     </div>
   </div>
@@ -106,7 +109,9 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary">Atualizar</button>
+        <button type="button" class="btn btn-custom" 
+        style="background-color: #1e3a5f; color: white; border: none; font-weight: bold;">
+        Atualizar</button>
       </div>
     </div>
   </div>
