@@ -1,4 +1,6 @@
-//criar banco de dados para salvar os valores e depois fazer a logica no controllers
+<?php
+require_once '../config/conexao.php';
+?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -33,24 +35,32 @@
                         <th class="text-center">Ações</th>
                     </tr>
                 </thead>
+
+                <?php
+                $query = $pdo->query("SELECT * FROM fornecedores ORDER BY idFornecedores DESC");
+                $fornecedores = $query->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($fornecedores as $f):
+                ?>
                 <tbody>
                     <tr>
-                        <td>1</td>
-                        <td>Tech Supplies Ltda</td>
-                        <td>12.345.678/0001-90</td>
+                        <td><?= $f['idFornecedores'] ?></td>
+                        <td><?= $f['name'] ?></td>
+                        <td><?= $f['cnpj'] ?></td>
                         <td class="text-center">
                             <button class="btn btn-sm btn-outline-primary me-1" title="Editar" 
-                            data-bs-toggle="modal" data-bs-target="#modalEditarFornecedor">
+                            data-bs-toggle="modal" data-bs-target="#modalEditarFornecedor"
+                            data-bs-id="<?= $f['idFornecedores'] ?>" data-bs-nome="<?= $f['name'] ?>" data-bs-cnpj="<?= $f['cnpj'] ?>">
                                 <i class="fas fa-edit"></i>
                                 </button>
 
                             <button class="btn btn-sm btn-outline-danger" type="button" 
-                            data-bs-toggle="modal" data-bs-target="#modalExcluirFornecedor" title="Excluir">
+                            data-bs-toggle="modal" data-bs-target="#modalExcluirFornecedor" 
+                            data-bs-id="<?= $f['idFornecedores'] ?>" data-bs-nome="<?= $f['name'] ?>" title="Excluir">
                                 <i class="fas fa-trash"></i>
                             </button>
-
                         </td>
                     </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -61,82 +71,113 @@
 <div class="modal fade" id="modalNovoFornecedor" tabindex="-1" aria-labelledby="modalNovoFornecedorLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
+    <form action="action.php" method="POST">
+
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="modalNovoFornecedorLabel">Novo Fornecedor</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-       <form>
+        <input type="hidden" name="idFornecedorEditar" id="idFornecedorEditar">
         <div class="mb-3">
             <label for="nomeFornecedor" class="form-label">Nome/Razão Social</label>
-            <input type="text" class="form-control" id="nomeFornecedor" placeholder="Ex: Fornecedor LTDA">
+            <input type="text" class="form-control" id="nameSupplierEdit" name = "nameSupplier" placeholder="Ex: Fornecedor LTDA">
         </div>
         <div class="mb-3">
             <label for="cnpjFornecedor" class="form-label">CNPJ</label>
-            <input type="text" class="form-control" id="cnpjFornecedor" placeholder="00.000.000/0000-00">
+            <input type="text" class="form-control" id="cnpjSupplierEdit" name = "cnpjSupplier" placeholder="00.000.000/0000-00">
         </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-custom" 
+        <button type="button" name = "cancel" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" name="new_supplier" class="btn btn-custom" 
         style="background-color: #1e3a5f; color: white; border: none; font-weight: bold;">
         Salvar</button>
       </div>
     </div>
+    </form>
   </div>
 </div>
 </div>
 
-<!-- Modal Editar Fornecedor-->
+<!-- Modal Editar Fornecedor -->
 <div class="modal fade" id="modalEditarFornecedor" tabindex="-1" aria-labelledby="modalEditarFornecedorLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modalEditarFornecedorLabel">Editar Fornecedor</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-        <div class="mb-3">
-            <label for="nomeFornecedor" class="form-label">Nome/Razão Social</label>
-            <input type="text" class="form-control" id="nomeFornecedor" placeholder="Ex: Fornecedor LTDA">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form action="action.php" method="POST">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalEditarFornecedorLabel">Editar Fornecedor</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <div class="modal-body">
+                    <input type="hidden" name="idFornecedorEditar" id="idFornecedorEditarEdit">
+                    <div class="mb-3">
+                        <label for="nomeFornecedorEditar" class="form-label">Nome/Razão Social</label>
+                        <input type="text" class="form-control" id="nomeFornecedorEditar" name="nameSupplierEdit" placeholder="Nome/Razão Social">
+                    </div>
+                    <div class="mb-3">
+                        <label for="cnpjFornecedorEditar" class="form-label">CNPJ</label>
+                        <input type="text" class="form-control" id="cnpjFornecedorEditar" name="cnpjSupplierEdit" placeholder="00.000.000/0000-00">
+                    </div>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" name="update_supplier" class="btn btn-custom" 
+                  style="background-color: #1e3a5f; color: white; border: none; font-weight: bold;">Atualizar</button>
+            </div>
+          </form>
         </div>
-        <div class="mb-3">
-            <label for="cnpjFornecedor" class="form-label">CNPJ</label>
-            <input type="text" class="form-control" id="cnpjFornecedor" placeholder="00.000.000/0000-00">
-        </div>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-custom" 
-        style="background-color: #1e3a5f; color: white; border: none; font-weight: bold;">
-        Atualizar</button>
-      </div>
     </div>
-  </div>
 </div>
-    </button>
 
-<!-- Modal Excluir Fornecedor-->
+<!-- Modal Excluir Fornecedor -->
 <div class="modal fade" id="modalExcluirFornecedor" tabindex="-1" aria-labelledby="modalExcluirFornecedorLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modalExcluirFornecedorLabel">Excluir Fornecedor</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="action.php" method="POST">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalExcluirFornecedorLabel">Excluir Fornecedor</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja excluir o fornecedor <strong id="nomeFornecedorExcluir"></strong>?</p>
+                    <input type="hidden" name="idFornecedorExcluir" id="idFornecedorExcluir">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" name="delete_supplier" class="btn btn-danger">Excluir Agora</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script> //script para Editar Fornecedor
+  const modalEditar = document.getElementById('modalEditarFornecedor');
+  modalEditar.addEventListener('show.bs.modal', event => {
+    const button = event.relatedTarget;
+    const id = button.getAttribute('data-bs-id');
+    const nome = button.getAttribute('data-bs-nome');
+    const cnpj = button.getAttribute('data-bs-cnpj');
+
+    document.getElementById('idFornecedorEditarEdit').value = id;
+    document.getElementById('nomeFornecedorEditar').value = nome;
+    document.getElementById('cnpjFornecedorEditar').value = cnpj;
+  });
+</script>
+
+<script> //script para Excluir Fornecedor
+const modalExcluir = document.getElementById('modalExcluirFornecedor');
+modalExcluir.addEventListener('show.bs.modal', event => {
+    const button = event.relatedTarget; 
+    const id = button.getAttribute('data-bs-id'); 
+    const nome = button.getAttribute('data-bs-nome');
+
+    modalExcluir.querySelector('#idFornecedorExcluir').value = id;
+    modalExcluir.querySelector('#nomeFornecedorExcluir').textContent = nome;
+});
+</script>
 </body>
 </html>
