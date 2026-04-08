@@ -1,5 +1,6 @@
 <?php
 require_once '../config/conexao.php';
+
 $queryForn = $pdo->query("SELECT idfornecedores, name FROM fornecedores ORDER BY name ASC");
 $listaFornecedores = $queryForn->fetchAll(PDO::FETCH_ASSOC);
 ?>

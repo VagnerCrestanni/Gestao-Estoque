@@ -1,3 +1,18 @@
+<?php
+require '../config/conexao.php';
+
+// Consulta para obter os produtos com o nome do fornecedor
+$query = $pdo->query("SELECT produtos.*, fornecedores.name as nome_fornecedor 
+                      FROM produtos 
+                      LEFT JOIN fornecedores ON produtos.fornecedor_id = fornecedores.idfornecedores 
+                      ORDER BY produtos.id DESC");
+$produtos = $query->fetchAll(PDO::FETCH_ASSOC);
+
+$query_count = $pdo->query("SELECT COUNT(*) as total FROM cesta_itens");
+$contagem = $query_count->fetch(PDO::FETCH_ASSOC);
+$total_itens = $contagem['total'];
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -15,66 +30,38 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 style = "color:#1e3a5f; font-size:35px">Vitrine de Seleção</h1>
 
-            <button class="btn btn-custom mb-4" data-bs-toggle="modal" data-bs-target="#modalNovaVitrine"
-            style="background-color: #1e3a5f; color: white; border: none; font-weight: bold;">
-                <i class="fas fa-plus"></i> Adicionar à Cesta
-            </button>
+            <a href="basket.php" class="btn btn-custom mb-4"
+                style="background-color: #1e3a5f; color: white; border: none; font-weight: bold;">
+                <i class="fas fa-shopping-basket"></i> Ver Cesta (<?= $total_itens ?>)
+            </a>
         </div>
     </div>
     
     <div class ="container">
         <div class="row row-cols-1 row-cols-md-3 g-4">
 
-        <div class = "col">
-            <div class = "card h-100 shadow-sm border-0 position-relative">
-                <input type = "checkbox" class = "form-check- input border-primary position-absolute top-0 end-0 m-2"
-                    style = "transform: scale(2);">
-                <img src="https://picsum.photos/400/300" class="img-fluid rounded" alt="Exemplo">
-                <div class="card-body">
-                    <h5 class="card-title">Notebook Gamer</h5>
-                    <p class = "text-muted small mb-1"> Fornecedor: Tech Supplies Ltda </p>
-                    <h4 class = "fw-bold">R$ 4.500,00</h4> 
-                </div>    
-            </div>
-        </div>   
-        
-        <div class ="col">
-            <div class = "card h-100 shadow-sm border-0 position-relative">
-                <input type = "checkbox" class = "form-check- input border-primary position-absolute top-0 end-0 m-2"
-                    style = "transform: scale(2);"> 
-                <img src="https://picsum.photos/400/300" class="img-fluid rounded" alt="Exemplo">
-                <div class="card-body">
-                    <h5 class="card-title">Smartphone de Última Geração</h5>
-                    <p class = "text-muted small mb-1"> Fornecedor: Mobile World Ltda </p>
-                    <h4 class = "fw-bold">R$ 2.300,00</h4>
-                </div>
-            </div>
-        </div>
-        
-        <div class = "col">
-            <div class = "card h-100 shadow-sm border-0 position-relative">
-                <input type = "checkbox" class = "form-check- input border-primary position-absolute top-0 end-0 m-2"
-                    style = "transform: scale(2);"> 
-                <img src="https://picsum.photos/400/300" class="img-fluid rounded" alt="Exemplo">
-                <div class="card-body">
-                    <h5 class="card-title">Monitor UltraWide</h5>
-                    <p class = "text-muted small mb-1"> Fornecedor: DisplayTech Ltd </p>
-                    <h4 class = "fw-bold">R$ 1.800,00</h4>
-                </div>
-            </div>
-        </div>
+            <?php foreach ($produtos as $p): ?>
+            <div class = "col">
+                <div class = "card h-100 shadow-sm border-0 position-relative">
+                    <input type = "checkbox" class = "form-check-input border-primary position-absolute top-0 end-0 m-2"
+                        style = "transform: scale(2);">
+                    <img src="<?= $p['url_imagem'] ?>" class="card-img-top img-fluid rounded-top" 
+                    alt="<?= $p['name'] ?>" style="height: 200px; object-fit: cover;">
 
-        <div class = "col">
-            <div class = "card h-100 shadow-sm border-0 position-relative">
-                <input type = "checkbox" class = "form-check- input border-primary position-absolute top-0 end-0 m-2"
-                    style = "transform: scale(2);"> 
-                <img src="https://picsum.photos/400/300" class="img-fluid rounded" alt="Exemplo">
-                <div class="card-body">
-                    <h5 class="card-title">Teclado Mecânico RGB</h5>
-                    <p class = "text-muted small mb-1"> Fornecedor: Gaming Gear Ltda </p>
-                    <h4 class = "fw-bold">R$ 350,00</h4>    
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold"><?= $p['name'] ?></h5>
+
+                        <p class="text-muted small mb-1"> Fornecedor: <?= $p['nome_fornecedor'] ?? 'Não Informado' ?></p>
+
+                        <h4 class="fw-bold text-primary">R$ <?= number_format($p['preço'], 2, ',', '.') ?></h4> 
+
+                        <a href="basket_action.php?acao=adicionar&id=<?= $p['id'] ?>" class="btn btn-outline-primary w-100 mt-3 fw-bold">
+                            <i class="fas fa-cart-plus"></i> Adicionar à Cesta
+                        </a>
+                    </div>    
                 </div>
-            </div>
+            </div>  
+            <?php endforeach; ?> 
         </div>
     </div>
 

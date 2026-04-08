@@ -1,3 +1,22 @@
+<?php
+require '../config/conexao.php';
+
+//Conta Total de Produtos
+$queryProd = $pdo->query("SELECT COUNT(*) as total FROM produtos");
+$totalProdutos = $queryProd->fetch(PDO::FETCH_ASSOC)['total'];
+
+//Conta Total de Fornecedores
+$queryForn = $pdo->query("SELECT COUNT(*) as total FROM fornecedores");
+$totalFornecedores = $queryForn->fetch(PDO::FETCH_ASSOC)['total'];
+
+// Conta Total de Itens na Cesta (Soma das quantidades ou contagem de linhas)
+$queryCesta = $pdo->query("SELECT COUNT(*) as total FROM cesta_itens");
+$totalCesta = $queryCesta->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+
+// Conta o valor total da cesta (soma dos subtotais)
+$queryValorCesta = $pdo->query("SELECT SUM(cesta_itens.quantidade * produtos.preço) as total_cesta FROM cesta_itens JOIN produtos ON cesta_itens.produto_id = produtos.id");
+$totalValorCesta = $queryValorCesta->fetch(PDO::FETCH_ASSOC)['total_cesta'] ?? 0;
+?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -20,21 +39,28 @@
 
                 <div class="card-item">
                    <i class="fa-solid fa-box-open icon-card"></i>
-                   <span class="value-total">6</span>
+                   <span class="value-total"><?= $totalProdutos ?></span>
                    <p class="label-card">Total de Produtos</p>
                 </div>
 
                 <div class="card-item">
-                   <i class="fa-solid fa-users icon-card"></i>
-                   <span class="value-total">3</span>
-                   <p class="label-card">Fornecedores</p>
+                    <i class="fa-solid fa-users icon-card"></i>
+                    <span class="value-total"><?= $totalFornecedores ?></span>
+                    <p class="label-card">Fornecedores</p>
                 </div>
 
                 <div class="card-item">
-                   <i class="fa-solid fa-cart-shopping icon-card"></i>
-                   <span class="value-total">2</span>
-                   <p class="label-card">Itens na Cesta</p>
+                    <i class="fa-solid fa-cart-shopping icon-card"></i>
+                    <span class="value-total"><?= $totalCesta ?></span>
+                    <p class="label-card">Itens na Cesta</p>
                 </div>
+
+                <div class="card-item">
+                    <i class="fa-solid fa-dollar-sign icon-card"></i>
+                    <span class="value-total"><?= 'R$ ' . number_format($totalValorCesta, 2, ',', '.') ?></span>
+                    <p class="label-card">Valor Total da Cesta</p>
+                </div>
+
                 </div>
             <div>
                 <div class="card-notice">
