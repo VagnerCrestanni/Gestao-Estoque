@@ -16,22 +16,22 @@ include_once '../config/conexao.php';
 
     <div class="login-card p-5 shadow">
     <div>
-        <form id="login-form" action = "login.php" method = "POST">
+        <form id="login-form" action = "login_action.php" method = "POST">
         <h1 class="fw-bold" style="color: #1e3a5f;">Gestão de Estoque</h1>
         <p class="text-muted"> Faça login para continuar</p>
 
     <div class = "mb-3">
-        <label class="form-label fw-bold text-dark" for = "email"> E-mail: </label>
-        <input type = "email" name = "email" id= "email" class ="form-control" placeholder = "seu@gmail.com" required>
+        <label class="form-label fw-bold text-dark" for = "email"> E-mail </label>
+        <input type = "text" name = "email" id= "email" class ="form-control" placeholder = "Seu E-mail" required>
     </div>
 
     <div class = "mb-3">
         <label class="form-label fw-bold text-dark" for = "password"> Senha: </label>
-        <input type = "password" name = "password" id= "password" class ="form-control" placeholder = "Digite sua Senha" required>
+        <input type = "password" name = "password" id= "password" class ="form-control" placeholder = "Senha" required>
     </div>
 
         <button type="submit" class="btn w-100 py-2 mt-2" style="background-color: #1e3a5f; color: white; border: none;"
-        >Acessar
+        >Entrar
     </button>
  </form>
 </div>
